@@ -43,7 +43,7 @@ def find_motif(sequence):
 
 
 if __name__ == "__main__":
-    with open("./rosalind_mprt.txt") as f:
+    with open("./datasets/rosalind_mprt.txt") as f:
         uniprot_ids = [id for id in f.read().strip().splitlines()]
 
     primary_ids = [clean_accession(id) for id in uniprot_ids]
