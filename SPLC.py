@@ -76,36 +76,30 @@ def parse_fasta(file_path):
     for head, tail in zip(header_positions, header_positions[1:] + [fasta_length]):
         sequence = "".join(fasta[head+1:tail])
         sequences.append(sequence)
-        
+    
     return sequences
 
-def translate_orf(rna_seqs):
-    protein_candidates = set()
-    
-    for rna_seq in rna_seqs:
-        for frame_offset in range(3):
-            reading_frame = rna_seq[frame_offset:]
-            for start in range(0, len(reading_frame)-2, 3):
-                if reading_frame[start:start+3] == "AUG":
-                    protein = []
-                    for coding_pos in range(start, len(reading_frame)-2, 3):
-                        codon = reading_frame[coding_pos:coding_pos+3]
-                        amino_acid = CODON_TABLE[codon]
-                        
-                        if amino_acid == "-": 
-                            protein_candidates.add("".join(protein))
-                            break
-                        else:
-                            protein.append(amino_acid)
-                    
-    return protein_candidates
+def splice_exons(sequence, introns):
+    for intron in introns:
+        sequence = sequence.replace(intron, "")
+    return sequence
 
+def exon_to_protein(spliced_sequence):
+    mrna = spliced_sequence.replace("T","U")
+    codons = []
+    
+    for codon_start in range(0,len(mrna)-2,3):
+        codons.append(mrna[codon_start:codon_start+3])
+    
+    protein_string = "".join(CODON_TABLE[c] for c in codons[:-1])
+    
+    return protein_string
+        
+    
 if __name__ == "__main__":
-    dna_seq = parse_fasta("rosalind_orf.txt")[0]
-    revc_dna_seq = dna_seq[::-1].translate(str.maketrans("ACGT","TGCA"))
+    sequences = parse_fasta("rosalind_splc.txt")
+    pre_mrna = sequences[0]
+    introns = sequences[1:]
     
-    rna_seq = dna_seq.replace("T","U")
-    revc_rna_seq = revc_dna_seq.replace("T","U")
-    
-    protein_candidates = translate_orf([rna_seq, revc_rna_seq])
-    print("\n".join(protein_candidates))
+    spliced_sequence = splice_exons(pre_mrna, introns)
+    print(exon_to_protein(spliced_sequence))
