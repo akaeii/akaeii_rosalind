@@ -18,6 +18,4 @@ for n in range(2, N + 1):
 
     t.append(b[-1] + a[-1])
 
-
-for i, total in zip(range(1, N + 1), t):
-    print(i, total)
+print(t[-1])
