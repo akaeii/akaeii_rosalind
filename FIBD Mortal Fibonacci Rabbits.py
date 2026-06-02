@@ -9,13 +9,12 @@ t = [1]
 
 for n in range(2, N + 1):
 
-    b.append(a[-1])
-
     if n <= m:
-        a.append(a[-1] + b[-2])
+        a.append(a[-1] + b[-1])
     else:
-        a.append((a[-1] + b[-2]) - b[-m - 1])
+        a.append((a[-1] + b[-1]) - b[-m])
 
+    b.append(a[-2])
     t.append(b[-1] + a[-1])
 
 print(t[-1])
