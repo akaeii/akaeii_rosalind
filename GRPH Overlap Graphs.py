@@ -29,9 +29,6 @@ for i, seq in enumerate(sequences):
 
     for ic, comp_seq in enumerate(compare_seq):
 
-        if seq == comp_seq:
-            print("bitch shove this edge case up your puckered butthole")
-
         if seq[-3:] == comp_seq[:3]:
             matches.append((names[i], compare_header[ic]))
 
